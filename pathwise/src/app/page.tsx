@@ -17,12 +17,12 @@ export default function Home() {
   return (
     <>
       {/* Hero Section */}
-      <main className="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-4">
+      <main className="flex flex-col items-center justify-center min-h-screen bg-blue-50 p-4">
         <h1 className="text-4xl font-bold mb-4 text-center">Find your path after your degree</h1>
         <p className="mb-6 text-lg text-gray-600 text-center">Discover the best careers for your background and interests.</p>
         <input
           className="border p-2 rounded w-full max-w-md mb-2"
-          placeholder="Enter your degree or interest"
+          placeholder=" Enter your degree or interest"
           value={query}
           onChange={e => setQuery(e.target.value)}
         />
