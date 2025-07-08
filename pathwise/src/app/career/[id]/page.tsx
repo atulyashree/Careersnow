@@ -6,7 +6,6 @@ import ProgressTracker from '../../../components/ProgressTracker';
 
 export default function CareerPathPage() {
   const params = useParams();
-  const searchParams = useSearchParams();
   const router = useRouter();
   const careerId = params.id as string;
   
