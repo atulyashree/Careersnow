@@ -1,6 +1,6 @@
 'use client';
-import { useSearchParams, useRouter } from 'next/navigation';
-import { useState, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
+import { useState, useMemo, useEffect } from 'react';
 import { careers } from '../../data/careers';
 import SearchFilters from '../../components/SearchFilters';
 
@@ -12,10 +12,9 @@ interface FilterOptions {
 }
 
 export default function ResultsPage() {
-  const searchParams = useSearchParams();
   const router = useRouter();
-  const skillsParam = searchParams.get('skills') || '';
-  const selectedSkills = skillsParam.split(',').map(s => s.trim()).filter(Boolean);
+  const [skillsParam, setSkillsParam] = useState('');
+  const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
   const [filters, setFilters] = useState<FilterOptions>({
     salaryRange: '',
     difficulty: '',
@@ -23,12 +22,21 @@ export default function ResultsPage() {
     timeToLearn: ''
   });
 
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const skills = params.get('skills') || '';
+      setSkillsParam(skills);
+      setSelectedSkills(skills.split(',').map((s: string) => s.trim()).filter((s: string) => Boolean(s)));
+    }
+  }, []);
+
   // Filter careers based on selected skills/tags and filters
   const filteredCareers = useMemo(() => {
     let results = selectedSkills.length === 0
       ? []
       : careers.filter(career =>
-          selectedSkills.some(skill =>
+          selectedSkills.some((skill: string) =>
             career.skills.core.includes(skill) || career.tags.includes(skill)
           )
         );
@@ -120,7 +128,7 @@ export default function ResultsPage() {
             <p className="text-gray-600 mb-3 text-sm">{career.summary}</p>
             
             <div className="flex flex-wrap gap-2 mb-3">
-              {career.tags.map(tag => (
+              {career.tags.map((tag: string) => (
                 <span key={tag} className="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs font-medium">
                   {tag}
                 </span>

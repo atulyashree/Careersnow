@@ -1,5 +1,5 @@
 'use client';
-import { useParams, useSearchParams, useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { getCareerById } from '../../../data/careers';
 import ProgressTracker from '../../../components/ProgressTracker';
