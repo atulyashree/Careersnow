@@ -13,7 +13,6 @@ interface FilterOptions {
 
 export default function ResultsPage() {
   const router = useRouter();
-  const [skillsParam, setSkillsParam] = useState('');
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
   const [filters, setFilters] = useState<FilterOptions>({
     salaryRange: '',
@@ -26,7 +25,6 @@ export default function ResultsPage() {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
       const skills = params.get('skills') || '';
-      setSkillsParam(skills);
       setSelectedSkills(skills.split(',').map((s: string) => s.trim()).filter((s: string) => Boolean(s)));
     }
   }, []);
