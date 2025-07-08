@@ -9,7 +9,6 @@ export default function CareerPathPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const careerId = params.id as string;
-  const originalQuery = searchParams.get('query') || '';
   
   const [activeTab, setActiveTab] = useState('overview');
   

@@ -26,11 +26,11 @@ export default function ProgressTracker({ careerId, roadmap }: ProgressTrackerPr
       const saved = localStorage.getItem(`progress-${careerId}`);
       if (saved) {
         // Parse and fix dateCompleted
-        const parsed = JSON.parse(saved).map((step: any) => ({
+        const parsed = (JSON.parse(saved) as Partial<ProgressStep>[]).map(step => ({
           ...step,
           dateCompleted: step.dateCompleted ? new Date(step.dateCompleted) : undefined
         }));
-        setProgress(parsed);
+        setProgress(parsed as ProgressStep[]);
       } else {
         // Initialize steps
         const steps: ProgressStep[] = [];

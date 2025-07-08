@@ -1,5 +1,5 @@
 // Requires: npm install react-select @types/react-select
-import Select, { MultiValue, Options, StylesConfig } from 'react-select';
+import Select, { MultiValue, StylesConfig } from 'react-select';
 
 interface SkillMultiSelectProps {
   options: string[];
