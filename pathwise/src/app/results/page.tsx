@@ -1,7 +1,7 @@
 'use client';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useState, useMemo } from 'react';
-import { careers, searchCareers } from '../../data/careers';
+import { careers } from '../../data/careers';
 import SearchFilters from '../../components/SearchFilters';
 
 interface FilterOptions {
@@ -14,7 +14,8 @@ interface FilterOptions {
 export default function ResultsPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const query = searchParams.get('query') || '';
+  const skillsParam = searchParams.get('skills') || '';
+  const selectedSkills = skillsParam.split(',').map(s => s.trim()).filter(Boolean);
   const [filters, setFilters] = useState<FilterOptions>({
     salaryRange: '',
     difficulty: '',
@@ -22,9 +23,15 @@ export default function ResultsPage() {
     timeToLearn: ''
   });
 
-  // Filter careers based on search query and filters
+  // Filter careers based on selected skills/tags and filters
   const filteredCareers = useMemo(() => {
-    let results = query ? searchCareers(query) : careers;
+    let results = selectedSkills.length === 0
+      ? []
+      : careers.filter(career =>
+          selectedSkills.some(skill =>
+            career.skills.core.includes(skill) || career.tags.includes(skill)
+          )
+        );
 
     // Apply filters
     if (filters.salaryRange) {
@@ -71,10 +78,10 @@ export default function ResultsPage() {
     }
 
     return results;
-  }, [query, filters]);
+  }, [selectedSkills, filters]);
 
   const handleViewPath = (careerId: string) => {
-    router.push(`/career/${careerId}?query=${encodeURIComponent(query)}`);
+    router.push(`/career/${careerId}?skills=${encodeURIComponent(selectedSkills.join(','))}`);
   };
 
   const handleFiltersChange = (newFilters: FilterOptions) => {
@@ -85,7 +92,7 @@ export default function ResultsPage() {
     <main className="p-8 max-w-7xl mx-auto">
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">
-          Career paths for: <span className="text-blue-600">{query}</span>
+          Career paths for: <span className="text-blue-600">{selectedSkills.length > 0 ? selectedSkills.join(', ') : 'None'}</span>
         </h1>
         <p className="text-gray-600">Found {filteredCareers.length} relevant career paths</p>
       </div>

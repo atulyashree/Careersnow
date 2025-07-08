@@ -101,30 +101,30 @@ export default function CareerPathPage() {
                 {/* Overview Tab */}
                 {activeTab === 'overview' && (
                   <div>
-                    <h3 className="text-xl font-semibold mb-4">Career Overview</h3>
+                    <h3 className="text-xl font-semibold mb-4 text-gray-600">Career Overview</h3>
                     <p className="text-gray-600 mb-6">{career.overview}</p>
                     
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                       <div>
-                        <h4 className="font-semibold mb-2">Salary Progression</h4>
+                        <h4 className="font-semibold mb-2 text-green-600">Salary Progression</h4>
                         <div className="space-y-2">
                           <div className="flex justify-between">
                             <span className="text-gray-600">Entry Level:</span>
-                            <span className="font-medium">{career.salary.entry}</span>
+                            <span className="font-medium text-gray-500">{career.salary.entry}</span>
                           </div>
                           <div className="flex justify-between">
                             <span className="text-gray-600">Mid Level:</span>
-                            <span className="font-medium">{career.salary.mid}</span>
+                            <span className="font-medium text-gray-500">{career.salary.mid}</span>
                           </div>
                           <div className="flex justify-between">
                             <span className="text-gray-600">Senior Level:</span>
-                            <span className="font-medium">{career.salary.senior}</span>
+                            <span className="font-medium text-gray-500">{career.salary.senior}</span>
                           </div>
                         </div>
                       </div>
                       
                       <div>
-                        <h4 className="font-semibold mb-2">Key Benefits</h4>
+                        <h4 className="font-semibold mb-2 text-green-600">Key Benefits</h4>
                         <ul className="space-y-1 text-sm text-gray-600">
                           <li>• High earning potential</li>
                           <li>• Remote work opportunities</li>
@@ -134,7 +134,7 @@ export default function CareerPathPage() {
                       </div>
                       
                       <div>
-                        <h4 className="font-semibold mb-2">Work Environment</h4>
+                        <h4 className="font-semibold mb-2 text-green-600">Work Environment</h4>
                         <ul className="space-y-1 text-sm text-gray-600">
                           <li>• Office or remote work</li>
                           <li>• Collaborative teams</li>
@@ -149,7 +149,7 @@ export default function CareerPathPage() {
                 {/* Roadmap Tab */}
                 {activeTab === 'roadmap' && (
                   <div>
-                    <h3 className="text-xl font-semibold mb-4">Learning Roadmap</h3>
+                    <h3 className="text-xl font-semibold mb-4 text-gray-600">Learning Roadmap</h3>
                     <div className="space-y-6">
                       {career.roadmap.map((phase, index) => (
                         <div key={index} className="border-l-4 border-blue-500 pl-6">
@@ -173,7 +173,7 @@ export default function CareerPathPage() {
                 {/* Skills Tab */}
                 {activeTab === 'skills' && (
                   <div>
-                    <h3 className="text-xl font-semibold mb-4">Required Skills</h3>
+                    <h3 className="text-xl font-semibold mb-4 text-gray-600">Required Skills</h3>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                       <div>
                         <h4 className="font-semibold mb-3 text-green-600">Core Technical Skills</h4>
@@ -214,15 +214,15 @@ export default function CareerPathPage() {
                 {/* Resources Tab */}
                 {activeTab === 'resources' && (
                   <div>
-                    <h3 className="text-xl font-semibold mb-4">Learning Resources</h3>
+                    <h3 className="text-xl font-semibold mb-4 text-gray-600">Learning Resources</h3>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                       <div>
-                        <h4 className="font-semibold mb-3">Recommended Courses</h4>
+                        <h4 className="font-semibold mb-3 text-gray-600">Recommended Courses</h4>
                         <div className="space-y-3">
                           {career.resources.courses.map((course, index) => (
                             <div key={index} className="bg-gray-50 p-4 rounded-lg">
-                              <div className="font-medium">{course.name}</div>
+                              <div className="font-medium text-gray-600">{course.name}</div>
                               <div className="text-sm text-gray-600">{course.platform}</div>
                               <div className="flex justify-between items-center mt-2">
                                 <span className="text-green-600 font-medium">{course.price}</span>
@@ -234,19 +234,19 @@ export default function CareerPathPage() {
                       </div>
                       
                       <div>
-                        <h4 className="font-semibold mb-3">Essential Books</h4>
+                        <h4 className="font-semibold mb-3 text-gray-600">Essential Books</h4>
                         <div className="space-y-2">
                           {career.resources.books.map((book, index) => (
-                            <div key={index} className="bg-gray-50 p-3 rounded-lg text-sm">
+                            <div key={index} className="bg-gray-50 p-3 rounded-lg text-sm text-gray-600">
                               {book}
                             </div>
                           ))}
                         </div>
                         
-                        <h4 className="font-semibold mb-3 mt-6">Tools & Software</h4>
+                        <h4 className="font-semibold mb-3 mt-6 text-gray-600">Tools & Software</h4>
                         <div className="flex flex-wrap gap-2">
                           {career.resources.tools.map((tool) => (
-                            <span key={tool} className="bg-blue-100 text-blue-700 px-3 py-1 rounded text-sm">
+                            <span key={tool} className="bg-blue-100 text-yellow-800 px-3 py-1 rounded text-sm">
                               {tool}
                             </span>
                           ))}
@@ -259,10 +259,10 @@ export default function CareerPathPage() {
                 {/* Companies Tab */}
                 {activeTab === 'companies' && (
                   <div>
-                    <h3 className="text-xl font-semibold mb-4">Top Companies Hiring</h3>
+                    <h3 className="text-xl font-semibold mb-4 text-gray-600">Top Companies Hiring</h3>
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                       {career.companies.map((company) => (
-                        <div key={company} className="bg-white border border-gray-200 p-4 rounded-lg text-center hover:shadow-md transition-shadow">
+                        <div key={company} className="bg-purple-100 border border-gray-200 p-4 rounded-lg text-center hover:shadow-md transition-shadow">
                           <div className="font-medium text-gray-800">{company}</div>
                         </div>
                       ))}

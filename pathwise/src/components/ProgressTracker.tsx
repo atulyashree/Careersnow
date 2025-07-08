@@ -1,5 +1,6 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import * as React from 'react';
 
 interface ProgressStep {
   id: string;
@@ -17,28 +18,45 @@ interface ProgressTrackerProps {
 }
 
 export default function ProgressTracker({ careerId, roadmap }: ProgressTrackerProps) {
-  const [progress, setProgress] = useState<ProgressStep[]>(() => {
-    // Initialize progress from localStorage or create new
-    const saved = localStorage.getItem(`progress-${careerId}`);
-    if (saved) {
-      return JSON.parse(saved);
-    }
-    
-    // Create progress steps from roadmap
-    const steps: ProgressStep[] = [];
-    roadmap.forEach((phase, phaseIndex) => {
-      phase.steps.forEach((step, stepIndex) => {
-        steps.push({
-          id: `${phaseIndex}-${stepIndex}`,
-          title: step,
-          completed: false
+  const [progress, setProgress] = useState<ProgressStep[]>([]);
+
+  // Load progress from localStorage on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem(`progress-${careerId}`);
+      if (saved) {
+        // Parse and fix dateCompleted
+        const parsed = JSON.parse(saved).map((step: any) => ({
+          ...step,
+          dateCompleted: step.dateCompleted ? new Date(step.dateCompleted) : undefined
+        }));
+        setProgress(parsed);
+      } else {
+        // Initialize steps
+        const steps: ProgressStep[] = [];
+        roadmap.forEach((phase, phaseIndex) => {
+          phase.steps.forEach((step, stepIndex) => {
+            steps.push({
+              id: `${phaseIndex}-${stepIndex}`,
+              title: step,
+              completed: false
+            });
+          });
         });
-      });
-    });
-    return steps;
-  });
+        setProgress(steps);
+      }
+    }
+  }, [careerId, roadmap]);
+
+  // Save progress to localStorage whenever it changes
+  useEffect(() => {
+    if (typeof window !== 'undefined' && progress.length > 0) {
+      localStorage.setItem(`progress-${careerId}`, JSON.stringify(progress));
+    }
+  }, [progress, careerId]);
 
   const toggleStep = (stepId: string) => {
+    console.log('Clicked step:', stepId);
     const updatedProgress = progress.map(step => {
       if (step.id === stepId) {
         return {
@@ -51,7 +69,6 @@ export default function ProgressTracker({ careerId, roadmap }: ProgressTrackerPr
     });
     
     setProgress(updatedProgress);
-    localStorage.setItem(`progress-${careerId}`, JSON.stringify(updatedProgress));
   };
 
   const completedSteps = progress.filter(step => step.completed).length;
@@ -61,7 +78,7 @@ export default function ProgressTracker({ careerId, roadmap }: ProgressTrackerPr
   return (
     <div className="bg-white rounded-lg shadow-sm p-6">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold">Your Progress</h3>
+        <h3 className="text-lg font-semibold text-gray-600">Your Progress</h3>
         <div className="text-right">
           <div className="text-2xl font-bold text-blue-600">{progressPercentage}%</div>
           <div className="text-sm text-gray-500">{completedSteps} of {totalSteps} steps</div>
@@ -80,47 +97,41 @@ export default function ProgressTracker({ careerId, roadmap }: ProgressTrackerPr
 
       {/* Progress Steps */}
       <div className="space-y-4">
-        {roadmap.map((phase, phaseIndex) => (
-          <div key={phaseIndex} className="border-l-4 border-blue-500 pl-4">
-            <h4 className="font-medium text-blue-600 mb-2">{phase.phase}</h4>
-            <div className="space-y-2">
-              {phase.steps.map((step, stepIndex) => {
-                const stepId = `${phaseIndex}-${stepIndex}`;
-                const progressStep = progress.find(p => p.id === stepId);
-                const isCompleted = progressStep?.completed || false;
-                
-                return (
-                  <div key={stepIndex} className="flex items-start space-x-3">
-                    <button
-                      onClick={() => toggleStep(stepId)}
-                      className={`flex-shrink-0 w-5 h-5 rounded-full border-2 mt-0.5 transition-colors ${
-                        isCompleted 
-                          ? 'bg-green-500 border-green-500' 
-                          : 'border-gray-300 hover:border-blue-400'
-                      }`}
-                    >
-                      {isCompleted && (
-                        <svg className="w-3 h-3 text-white mx-auto" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                        </svg>
-                      )}
-                    </button>
-                    <div className="flex-1">
-                      <span className={`text-sm ${isCompleted ? 'line-through text-gray-500' : 'text-gray-700'}`}>
-                        {step}
-                      </span>
-                      {isCompleted && progressStep?.dateCompleted && (
-                        <div className="text-xs text-green-600 mt-1">
-                          Completed on {new Date(progressStep.dateCompleted).toLocaleDateString()}
-                        </div>
-                      )}
+        {roadmap.map((phase: { phase: string; steps: string[] }, phaseIndex: number) => {
+          const renderStep = (step: string, stepIndex: number) => {
+            const stepId = `${phaseIndex}-${stepIndex}`;
+            const progressStep = progress.find(p => p.id === stepId);
+            const isCompleted = progressStep?.completed || false;
+
+            return (
+              <div key={stepIndex} className="flex items-start space-x-5">
+                <button
+                  style={{ width: 20, height: 20, border: '2px solid blue', borderRadius: '50%' }}
+                  onClick={() => toggleStep(stepId)}
+                >
+                  X
+                </button>
+                <div className="flex-1">
+                  <span className={`text-sm ${isCompleted ? 'line-through text-gray-500' : 'text-gray-700'}`}>{step}</span>
+                  {isCompleted && progressStep?.dateCompleted && (
+                    <div className="text-xs text-green-600 mt-1">
+                      Completed on {new Date(progressStep.dateCompleted).toLocaleDateString()}
                     </div>
-                  </div>
-                );
-              })}
+                  )}
+                </div>
+              </div>
+            );
+          };
+
+          return (
+            <div key={phaseIndex} className="border-l-4 border-blue-500 pl-4">
+              <h4 className="font-medium text-blue-600 mb-2">{phase.phase}</h4>
+              <div className="space-y-2">
+                {phase.steps.map(renderStep)}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Reset Progress Button */}
