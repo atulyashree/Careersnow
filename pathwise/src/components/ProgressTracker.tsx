@@ -136,7 +136,7 @@ export default function ProgressTracker({ careerId, roadmap }: ProgressTrackerPr
 
       {/* Reset Progress Button */}
       {completedSteps > 0 && (
-        <div className="mt-6 pt-4 border-t">
+        <div className="mt-6 pt-4 border-t text-gray-500">
           <button
             onClick={() => {
               const resetProgress = progress.map(step => ({
